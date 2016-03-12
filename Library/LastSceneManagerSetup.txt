@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/_Scenes/Quadbotria_Rough_Draft.unity
+  isLoaded: 1
+  isActive: 1

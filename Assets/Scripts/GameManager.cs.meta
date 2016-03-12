@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ef85eb9afc179c24e94fed08fe6be463
+timeCreated: 1455673866
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - player1Prefab: {fileID: 176842, guid: d870df1e28da3934fb66361e47c70a19, type: 2}
+  - player2Prefab: {fileID: 101148, guid: 0dd878899f089ec4b9d5fd84f0d684b4, type: 2}
+  - player1Signal: {instanceID: 0}
+  - player2Signal: {instanceID: 0}
+  - aiManager: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
