@@ -29,6 +29,7 @@ public class NetworkManager : MonoBehaviour
 
 	public bool isConnected;
 	public bool isServer;
+    public string tempIP = "";
 
     public UdpClient sender;
     public UdpClient receiver;
@@ -71,18 +72,17 @@ public class NetworkManager : MonoBehaviour
 			if(!isConnected)				// If we are not connect to the server, show 2 options to choose from (create server or direct connect to one)
 			{
 				GUI.BeginGroup(new Rect((Screen.width / 2) - 100, (Screen.height / 2) - 25, 200, 50), "");
-                string tempIP = "";
-                //tempIP = GUI.TextField(new Rect(0, 27, 190, 25), tempIP);
+                tempIP = GUI.TextField(new Rect(0, 27, 190, 25), tempIP);
 				if(GUI.Button(new Rect(0, 0, 95, 25), "Host"))
 					CreateServer();
                 if (GUI.Button(new Rect(100, 0, 95, 25), "Join"))
                 {
-//                    if (tempIP != "")
-//                    {
-//                        connectionIP = tempIP;
-//                    }
-
-                    StartReceivingIP();
+                    if (tempIP != "")
+                    {
+                        connectionIP = tempIP;
+                    }
+                    DirectConnect(connectionIP);
+                    //StartReceivingIP();
                 }
 				GUI.EndGroup();
 			}
@@ -98,10 +98,16 @@ public class NetworkManager : MonoBehaviour
 	}
 	void NetworkMessageCheck()
 	{
-		if(Network.peerType == NetworkPeerType.Disconnected)
+        NetworkPeerType type = Network.peerType;
+		if(type == NetworkPeerType.Disconnected)
 		{
 			networkMessage = "Status: Disconnected from the server";
 			isConnected = false;
+
+            if (receivedData != null)
+            {
+                DirectConnect(receivedData[1]);
+            }
 		}
 		else if(Network.peerType == NetworkPeerType.Connecting)
 		{
@@ -137,6 +143,7 @@ public class NetworkManager : MonoBehaviour
 	void OnDisconnectedFromServer()
 	{
 		mChat.messages.Clear();												// Clear messages history
+        receivedData = null;
 	}
 
 	public void CreateServer()																// Create simple local server
