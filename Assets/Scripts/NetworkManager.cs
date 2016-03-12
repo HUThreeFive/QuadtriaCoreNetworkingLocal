@@ -37,6 +37,9 @@ public class NetworkManager : MonoBehaviour
 
     private GameManager _GameManager;
 
+    private IPAddress hostIP;
+    bool tryConnect = true;
+
 	ChatManager mChat;										// Access to the chat script
 
 	void Start()
@@ -52,7 +55,17 @@ public class NetworkManager : MonoBehaviour
 	void Update()
 	{
 		NetworkMessageCheck();						// This will check if we are connected, disconnected, client or server and display a message depending on this
-	}
+
+        if (tryConnect)
+        {
+            if (receivedData != null)
+            {
+                DirectConnect(receivedData[1].Trim());
+                tryConnect = false;
+            }
+        }
+
+    }
 
     void OnGUI()
 	{
@@ -80,9 +93,12 @@ public class NetworkManager : MonoBehaviour
                     if (tempIP != "")
                     {
                         connectionIP = tempIP;
+                        DirectConnect(connectionIP);
                     }
-                    DirectConnect(connectionIP);
-                    //StartReceivingIP();
+                    else
+                    {
+                        StartReceivingIP();
+                    }
                 }
 				GUI.EndGroup();
 			}
@@ -104,10 +120,10 @@ public class NetworkManager : MonoBehaviour
 			networkMessage = "Status: Disconnected from the server";
 			isConnected = false;
 
-            if (receivedData != null)
-            {
-                DirectConnect(receivedData[1]);
-            }
+//            if (receivedData != null)
+//            {
+//                DirectConnect(receivedData[1]);
+//            }
 		}
 		else if(Network.peerType == NetworkPeerType.Connecting)
 		{
@@ -207,6 +223,7 @@ public class NetworkManager : MonoBehaviour
         if (!string.IsNullOrEmpty(receivedString))
         {
             receivedData = receivedString.Split('*');
+            //hostIP = IPAddress.Parse(receivedData[1]);
 
         }
     }
