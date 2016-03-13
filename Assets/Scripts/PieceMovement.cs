@@ -181,7 +181,7 @@ public class PieceMovement : MonoBehaviour {
         }
 		foreach (GameObject o in currentPositions) {
 
-			positionString += o.transform.position.x + "|" + o.transform.position.z + "+";
+            positionString += o.transform.position.x + "|"+ o.transform.position.y + "|" + o.transform.position.z + "+";
 		}
 
 		return positionString;

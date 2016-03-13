@@ -70,7 +70,6 @@ public class NetworkManager : MonoBehaviour
             if (Network.connections.Length > 0)
             {
                 CancelInvoke("SendData");
-                sender.EndSend();
                 sender.Close();
             }
         }

@@ -122,10 +122,10 @@ public class ChatManager : MonoBehaviour
         {
             string[] xAndz = positions[x].Split('|');
 
-            if (go.transform.position.x.ToString() != xAndz[0] || go.transform.position.z.ToString() != xAndz[1])      
+            if (go.transform.position.x.ToString() != xAndz[0] || go.transform.position.z.ToString() != xAndz[2])      
             {
                 // this is what changed
-                Vector3 temp = new Vector3(Convert.ToSingle(xAndz[0]), go.transform.position.y, Convert.ToSingle(xAndz[1]));
+                Vector3 temp = new Vector3(Convert.ToSingle(xAndz[0]), Convert.ToSingle(xAndz[1]), Convert.ToSingle(xAndz[2]));
                 go.transform.position = temp;
 
                 _GameManager.moveCount++;
