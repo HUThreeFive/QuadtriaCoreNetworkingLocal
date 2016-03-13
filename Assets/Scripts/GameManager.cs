@@ -94,30 +94,48 @@ public class GameManager : MonoBehaviour {
     {
         if (hasGameStarted)
         {
-            if (moveCount >= moveLimit)
-            {
-                gameOverText.text = "It's a tie!";
-                hasGameStarted = false;
-                menuCanvas.SetActive(true);
-            }
-            else if (CheckForWins(true))
-            {
-                gameOverText.text = "You lose";
-                hasGameStarted = false;
-                menuCanvas.SetActive(true);
-            }
-            else if (CheckForWins(false))
-            {
-                gameOverText.text = "You win!";
-                hasGameStarted = false;
-                menuCanvas.SetActive(true);
-            }
-
             if (_nManager.isConnected) //network game
             {
-                if (isFirstMove) 
+                if (moveCount >= moveLimit)
                 {
-                    if(isPlayerFirst)
+                    gameOverText.text = "It's a tie!";
+                    hasGameStarted = false;
+                    menuCanvas.SetActive(true);
+                }
+                if (_nManager.isServer)
+                {
+                    if (CheckForWins(true)) //red team
+                    {
+                        gameOverText.text = "You lose";
+                        hasGameStarted = false;
+                        menuCanvas.SetActive(true);
+                    }
+                    else if (CheckForWins(false)) // blue team
+                    {
+                        gameOverText.text = "You win!";
+                        hasGameStarted = false;
+                        menuCanvas.SetActive(true);
+                    }
+                }
+                else //isClient
+                {
+                    if (CheckForWins(true)) //red team
+                    {
+                        gameOverText.text = "You win";
+                        hasGameStarted = false;
+                        menuCanvas.SetActive(true);
+                    }
+                    else if (CheckForWins(false)) // blue team
+                    {
+                        gameOverText.text = "You lose!";
+                        hasGameStarted = false;
+                        menuCanvas.SetActive(true);
+                    }
+                }
+                        
+                if (isFirstMove)
+                {
+                    if (isPlayerFirst)
                     {   
                         isPlayerTurn = true;
                     }
@@ -129,13 +147,35 @@ public class GameManager : MonoBehaviour {
                     isFirstMove = false;
                 }
             }
-            else if (!isPlayerTurn) //AI game and AI turn
-            {
-                aiManager.TakeTurn();
-            }
             else
             {
-                //AI game and player turn
+                if (moveCount >= moveLimit)
+                {
+                    gameOverText.text = "It's a tie!";
+                    hasGameStarted = false;
+                    menuCanvas.SetActive(true);
+                }
+                else if (CheckForWins(true))
+                {
+                    gameOverText.text = "You lose";
+                    hasGameStarted = false;
+                    menuCanvas.SetActive(true);
+                }
+                else if (CheckForWins(false))
+                {
+                    gameOverText.text = "You win!";
+                    hasGameStarted = false;
+                    menuCanvas.SetActive(true);
+                }
+
+                if (!isPlayerTurn) //AI game and AI turn
+                {
+                    aiManager.TakeTurn();
+                }
+                else
+                {
+                    //AI game and player turn
+                }
             }
         }
     }
