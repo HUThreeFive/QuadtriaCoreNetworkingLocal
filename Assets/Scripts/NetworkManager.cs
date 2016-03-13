@@ -65,6 +65,15 @@ public class NetworkManager : MonoBehaviour
             }
         }
 
+        if (isServer)
+        {
+            if (Network.connections.Length > 0)
+            {
+                CancelInvoke("SendData");
+                sender.EndSend();
+                sender.Close();
+            }
+        }
     }
 
     void OnGUI()
@@ -174,6 +183,7 @@ public class NetworkManager : MonoBehaviour
 
         //SendData ();
         InvokeRepeating("SendData",0,5f);
+
 	}
 
     public void DirectConnect(string ip)															// Connect to the local server

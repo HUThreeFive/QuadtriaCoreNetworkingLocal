@@ -131,6 +131,8 @@ public class ChatManager : MonoBehaviour
                 _GameManager.moveCount++;
                 _GameManager.moveCountText.text = (_GameManager.moveLimit - _GameManager.moveCount).ToString();
 
+                _GameManager.CheckForWins (_GameManager.isPlayerTurn);
+
                 if (pieces [1] == mNetwork.playerName) 
                 {
                     _GameManager.isPlayerTurn = false;
@@ -140,7 +142,6 @@ public class ChatManager : MonoBehaviour
                     _GameManager.isPlayerTurn = true;
                 }
 
-                _GameManager.CheckForWins (_GameManager.isPlayerTurn);
 
             }
 
