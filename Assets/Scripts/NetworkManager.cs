@@ -157,6 +157,8 @@ public class NetworkManager : MonoBehaviour
 	void OnConnectedToServer()
 	{
 		mChat.SendMessage("C*" + playerName + "*joined!");		// Add message to the chat when player connect
+        receiver.Close();
+        receiver = null;
 	}
 
 	void OnServerInitialized()
@@ -171,7 +173,8 @@ public class NetworkManager : MonoBehaviour
 
         if (isServer)
         {
-            Network.CloseConnection(Network.connections[0], false);
+            if(Network.connections.Length == 0)
+                Network.CloseConnection(Network.connections[0], false);
             Debug.Log("Local server connection disconnected");
         }
         else
@@ -183,6 +186,7 @@ public class NetworkManager : MonoBehaviour
         }
 
         _GameManager.NewGame();
+        tryConnect = true;
 	}
 
     void OnPlayerConnected(NetworkPlayer player)
@@ -191,7 +195,7 @@ public class NetworkManager : MonoBehaviour
         sender.Close();
     }
 
-    void OnPlayDisconnected(NetworkPlayer player)
+    void OnPlayerDisconnected(NetworkPlayer player)
     {
         Network.RemoveRPCs(player);
         Network.Disconnect();
@@ -209,7 +213,7 @@ public class NetworkManager : MonoBehaviour
         sender.Connect (groupEP);
 
         //SendData ();
-        InvokeRepeating("SendData",0,5f);
+        InvokeRepeating("SendData",0,.5f);
 
 	}
 
