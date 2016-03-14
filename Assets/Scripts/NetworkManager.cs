@@ -164,15 +164,43 @@ public class NetworkManager : MonoBehaviour
         mChat.SendMessage("C*" + playerName + "*joined!");		// Add message to the chat when player connect
 	}
 
-	void OnDisconnectedFromServer()
+	void OnDisconnectedFromServer(NetworkDisconnection info)
 	{
 		mChat.messages.Clear();												// Clear messages history
         receivedData = null;
+
+        if (isServer)
+        {
+            Network.CloseConnection(Network.connections[0], false);
+            Debug.Log("Local server connection disconnected");
+        }
+        else
+        {
+            if (info == NetworkDisconnection.LostConnection)
+                Debug.Log("Lost connection to the server");
+            else
+                Debug.Log("Successfully diconnected from the server");
+        }
+
+        _GameManager.NewGame();
 	}
+
+    void OnPlayerConnected(NetworkPlayer player)
+    {
+        CancelInvoke("SendData");
+        sender.Close();
+    }
+
+    void OnPlayDisconnected(NetworkPlayer player)
+    {
+        Network.RemoveRPCs(player);
+        Network.Disconnect();
+    }
 
 	public void CreateServer()																// Create simple local server
 	{
-		Network.InitializeServer(32, connectionPort, false);
+        Network.maxConnections = 1;
+		Network.InitializeServer(1, connectionPort, false);
 		isServer = true;
         _GameManager.isPlayerFirst = true;
 
